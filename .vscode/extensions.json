@@ -1,0 +1,8 @@
+{
+  "recommendations": [
+    /**
+     * Prettier integration.
+     */
+    "esbenp.prettier-vscode",
+  ]
+}

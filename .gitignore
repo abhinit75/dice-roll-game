@@ -1,0 +1,13 @@
+# Folders to ignore
+node_modules
+dist
+ts.dist
+kit.dist
+coverage
+
+# Temporary cached TS build info
+*.tsbuildinfo
+
+# Test outputs
+bst-debug.log
+test_output

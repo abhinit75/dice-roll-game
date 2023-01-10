@@ -1,0 +1,47 @@
+{
+  /**
+   * For Git, enable some convenience options to make the VS Code integration
+   * more straightforward.
+   */
+  "git.enableSmartCommit": true,
+  "git.autofetch": true,
+
+  /**
+   * Enable ligatures, and auto-fixing on save.
+   */
+  "editor.fontLigatures": true,
+  "editor.formatOnSave": true,
+
+  /**
+   * When moving source files in TS/JS, automatically update their associated
+   * imports.
+   */
+  "typescript.updateImportsOnFileMove.enabled": "always",
+  "javascript.updateImportsOnFileMove.enabled": "always",
+
+  /**
+   * Use default tab-size 2 for every source type.
+   */
+  "editor.tabSize": 2,
+
+  /**
+   * Ensure lines are not longer than some limit - word wrap if it is. This
+   * enables multi-column source views even on smaller monitors.
+   */
+  "editor.wordWrap": "wordWrapColumn",
+  "editor.wordWrapColumn": 100,
+  "editor.rulers": [100],
+
+  /**
+   * Javascript is likely to be configuration files, and result in spurious
+   * suggestions.
+   */
+  "javascript.suggestionActions.enabled": false,
+
+  /**
+   * Ensure the default formatter is the Prettier extension.
+   */
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+}
