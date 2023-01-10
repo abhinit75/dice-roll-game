@@ -1,6 +1,8 @@
 import * as Alexa from "ask-sdk";
-import {escapeXmlCharacters} from "ask-sdk";
-import {isIntent} from "./isIntent";
+import { escapeXmlCharacters } from "ask-sdk";
+import { isIntent } from "./isIntent";
+
+// Launch Intent
 
 const CancelOrStopIntentHandler: Alexa.RequestHandler = {
   canHandle: isIntent("AMAZON.CancelIntent", "AMAZON.StopIntent"),
