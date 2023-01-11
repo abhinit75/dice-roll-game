@@ -3,26 +3,20 @@ import { escapeXmlCharacters, getSlotValue } from "ask-sdk";
 import { isIntent } from "./isIntent";
 var AWS = require("aws-sdk");
 
-const region = "us-east-1";
-const accessKeyId = "AKIA2ZKMI5RI34N7AEOQ";
-const secretAccessKey = "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";
-const tableName = "dice-roll-game-table";
-
 // Helper Functions
-
 const rollDice = () => {
   return Math.floor(Math.random() * 6) + 1;
 };
 
 const add_to_db = (item) => {
   let dynamoDB = new AWS.DynamoDB({
-    region: region,
-    accessKeyId: accessKeyId,
-    secretAccessKey: secretAccessKey,
+    region: process.env.REGION,
+    accessKeyId: process.env.ACCESS_KEY_ID,
+    secretAccessKey: process.env.SECRET_ACCESS_KEY,
   });
 
   let params = {
-    TableName: tableName,
+    TableName: process.env.TABLE_NAME,
     Item: {
       TIME: { S: item.time },
       NAME: { S: item.name },
@@ -34,19 +28,16 @@ const add_to_db = (item) => {
 
 // retrieve top 10 records from dynamodb
 const retrieve_scores = async () => {
-  // data
-  let sorted_data = [];
-
   // Create the DynamoDB service object
   let dynamoDB = new AWS.DynamoDB({
-    region: region,
-    accessKeyId: accessKeyId,
-    secretAccessKey: secretAccessKey,
+    region: process.env.REGION,
+    accessKeyId: process.env.ACCESS_KEY_ID,
+    secretAccessKey: process.env.SECRET_ACCESS_KEY,
     apiVersion: "2012-08-10",
   });
 
   var params = {
-    TableName: tableName,
+    TableName: process.env.TABLE_NAME,
   };
   let data = await dynamoDB.scan(params).promise();
   var items = data.Items;
@@ -54,8 +45,7 @@ const retrieve_scores = async () => {
     return parseInt(b.SCORE.S) - parseInt(a.SCORE.S);
   });
 
-  items.size > 10 ? (sorted_data = items.slice(0, 10)) : (sorted_data = items);
-  return sorted_data;
+  return items;
 };
 
 // Launch Request Handler
@@ -125,7 +115,6 @@ const DiceRollIntentHandler: Alexa.RequestHandler = {
       sessionAttributes.score = 0;
     } else {
       if (prev_score == "0") {
-        console.log(prev_score);
         sessionAttributes.score = val;
       } else {
         sessionAttributes.score = parseInt(prev_score) + val;
@@ -244,14 +233,27 @@ const ViewHighScoreIntentHandler = {
   async handle(handlerInput) {
     // Retrieve from DB top 10 high scores
     const data = await retrieve_scores();
-    console.log("This is data: " + JSON.stringify(data));
+    let final_data;
+
+    // extract 10 things
+    if (data.length > 10) {
+      final_data = data.slice(0, 10);
+    } else {
+      final_data = data;
+    }
 
     // speak output:
     let speakOutput = "The top 10 high scores are: ";
 
-    for (let i = 0; i < data.length; i++) {
+    for (let i = 0; i < final_data.length; i++) {
       speakOutput +=
-        i + 1 + ": " + data[i].NAME.S + " with score " + data[i].SCORE.S + ", ";
+        i +
+        1 +
+        ": " +
+        final_data[i].NAME.S +
+        " with score " +
+        final_data[i].SCORE.S +
+        ", ";
     }
 
     return handlerInput.responseBuilder
