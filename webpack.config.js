@@ -41,7 +41,9 @@ module.exports = {
     path: path.join(__dirname, "dist"),
     libraryTarget: "commonjs",
   },
-  externals: ["aws-sdk"],
+  externals: {
+    "aws-sdk": "aws-sdk",
+  },
   plugins: [
     new ZipPlugin({
       include: ["index.js"],
