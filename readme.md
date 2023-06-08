@@ -1,4 +1,4 @@
-# Dice Roll Game
+# Voice & user-input Dice Roll Game
 
 This game was based on the Volley Start Kit
 
